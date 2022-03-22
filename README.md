@@ -11,6 +11,12 @@ git clone https://github.com/wxiaoqi/Spring-Cloud-PlatformUI.git
 npm install
 
 npm start
+
+# 新建项目启动步骤
+# 1、安装淘宝镜像依赖 npm install -g cnpm --registry=https://registry.npm.taobao.org 
+# 2、安装项目依赖 cnpm install 
+# 启动服务 npm run dev
+
 ```
 ### 功能预览
 |  |  |  |
