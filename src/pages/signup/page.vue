@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page">
+  <div class="regist-page">
     <div class="layer bg" id="login"></div>
     <div class="layer flex-center">
       <!-- logo部分 -->
@@ -29,14 +29,11 @@
               </el-input>
             </el-form-item>
             <el-button-group>
-              <el-button size="default" @click="submit" type="primary">登录</el-button>
+              <el-button size="default" @click="submit" type="primary">注册</el-button>
               <el-button size="default" @click="reset" >重置</el-button>
             </el-button-group>
             <el-button-group>
-<!--              <router-link to="signup" >没有账号？请注册</router-link>-->
-<!--              <el-link type="primary">忘记密码</el-link>-->
-<!--              <router-link to="signup">没有账号？请注册</router-link>-->
-              <el-link type="primary" href="././signup">没有账号？请注册</el-link>
+              <router-link to=""  >已有账号？去登录</router-link>
             </el-button-group>
 
           </el-form>
@@ -106,11 +103,12 @@ export default {
       }
     };
   },
-  mounted() {
+  //关闭
+/*  mounted() {
     // 初始化例子插件
     particlesJS("login", config);
-  },
-  beforeDestroy() {
+  },*/
+/*  beforeDestroy() {
     // 销毁 particlesJS
     // thanks https://github.com/d2-projects/d2-admin/issues/65
     // ref https://github.com/VincentGarreau/particles.js/issues/63
@@ -118,21 +116,22 @@ export default {
       pJSDom[0].pJS.fn.vendors.destroypJS();
       pJSDom = [];
     }
-  },
+  },*/
   created () {
     this.getCode()
   },
   methods: {
-    ...mapActions("d2admin/account", ["login"]),
-    /**
+  //  关闭
+  /*  ...mapActions("d2admin/account", ["login"]),
+    /!**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息
-     */
+     *!/
     handleUserBtnClick(user) {
       this.formLogin.username = user.username;
       this.formLogin.password = user.password;
       this.submit();
-    },
+    },*/
     getCode() {
       getCodeImg().then(response => {
         this.codeUrl = "data:image/gif;base64," + response.captcha;

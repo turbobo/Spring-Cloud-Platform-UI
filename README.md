@@ -17,6 +17,10 @@ npm start
 # 2、安装项目依赖 cnpm install 
 # 启动服务 npm run dev
 
+
+# @标识src文件目录，不可以在module和dist目录中使用，其他地方都行
+# css使用 ~@来标识src路径
+
 ```
 ### 功能预览
 |  |  |  |

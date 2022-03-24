@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "start": "npm run serve",
-    "dev": "npm run serve",
+    "dev": "npm run serve --open",
     "build": "vue-cli-service build",
     "build:travis": "vue-cli-service build --mode travis",
     "lint": "vue-cli-service lint --fix",
