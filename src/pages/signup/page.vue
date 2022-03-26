@@ -1,5 +1,5 @@
 <template>
-  <div class="regist-page">
+  <div class="login-page">
     <div class="layer bg" id="login"></div>
     <div class="layer flex-center">
       <!-- logo部分 -->
@@ -29,13 +29,13 @@
               </el-input>
             </el-form-item>
             <el-button-group>
-              <el-button size="default" @click="submit" type="primary">注册</el-button>
+              <el-button size="default" @click="signupSubmit" type="primary">注册</el-button>
               <el-button size="default" @click="reset" >重置</el-button>
             </el-button-group>
-            <el-button-group>
-              <router-link to=""  >已有账号？去登录</router-link>
-            </el-button-group>
 
+            <el-button-group>
+              <el-link type="primary" @click="goLogin" >已有账号？去登录</el-link>
+            </el-button-group>
           </el-form>
         </el-card>
       </div>
@@ -104,11 +104,11 @@ export default {
     };
   },
   //关闭
-/*  mounted() {
+  mounted() {
     // 初始化例子插件
     particlesJS("login", config);
-  },*/
-/*  beforeDestroy() {
+  },
+  beforeDestroy() {
     // 销毁 particlesJS
     // thanks https://github.com/d2-projects/d2-admin/issues/65
     // ref https://github.com/VincentGarreau/particles.js/issues/63
@@ -116,22 +116,22 @@ export default {
       pJSDom[0].pJS.fn.vendors.destroypJS();
       pJSDom = [];
     }
-  },*/
+  },
   created () {
     this.getCode()
   },
   methods: {
-  //  关闭
-  /*  ...mapActions("d2admin/account", ["login"]),
-    /!**
+  //  加载signUp函数
+   ...mapActions("d2admin/account", ["signUp"]),
+    /**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息
-     *!/
+     */
     handleUserBtnClick(user) {
       this.formLogin.username = user.username;
       this.formLogin.password = user.password;
-      this.submit();
-    },*/
+      this.signupSubmit();
+    },
     getCode() {
       getCodeImg().then(response => {
         this.codeUrl = "data:image/gif;base64," + response.captcha;
@@ -142,11 +142,25 @@ export default {
      * @description 提交表单
      */
     // 提交登录信息
-    submit() {
+    signupSubmit() {
       this.$refs.loginForm.validate(valid => {
+        // if (valid) {
+        //   // 注册
+        //   this.login({
+        //     vm: this,
+        //     username: this.formLogin.username,
+        //     password: this.formLogin.password,
+        //     verCode: this.formLogin.code,
+        //     uuid: this.formLogin.uuid
+        //   });
+        // } else {
+        //   // 登录表单校验失败
+        //   this.$message.error("表单校验失败");
+        // }
+
         if (valid) {
-          // 登录
-          this.login({
+          // 注册
+          this.signUp({
             vm: this,
             username: this.formLogin.username,
             password: this.formLogin.password,
@@ -168,6 +182,11 @@ export default {
       this.formLogin.username = "";
       this.formLogin.password = "";
       this.formLogin.code = "";
+    },
+    //跳转登录页面
+    goLogin() {
+      //替换页面，无法退回之前页面
+      this.$router.replace('/login')
     }
 
   }

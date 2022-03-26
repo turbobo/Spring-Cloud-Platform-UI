@@ -36,10 +36,23 @@
 <!--              <router-link to="signup" >没有账号？请注册</router-link>-->
 <!--              <el-link type="primary">忘记密码</el-link>-->
 <!--              <router-link to="signup">没有账号？请注册</router-link>-->
-              <el-link type="primary" href="././signup">没有账号？请注册</el-link>
+<!--              <el-link type="primary" href="/signup" >没有账号？请注册</el-link>-->
+              <el-link type="primary" @click="goSignup" >没有账号？请注册</el-link>
+<!--              <el-button size="default" @click="goSignup" >没有账号？请注册</el-button>-->
             </el-button-group>
 
           </el-form>
+
+<!--          &lt;!&ndash; 使用变量控制登录、注册页面展示&ndash;&gt;
+          <div v-show='page==="register"'>
+            <div>
+              <h1 class='title'>注册界面，没写，哈哈</h1>
+            </div>
+            <div id='bottomDiv'>
+              <a @click="goLogin">我要登录</a>
+            </div>
+          </div>-->
+
         </el-card>
       </div>
       <!-- 快速登录按钮 -->
@@ -169,6 +182,11 @@ export default {
       this.formLogin.username = "";
       this.formLogin.password = "";
       this.formLogin.code = "";
+    },
+    //跳转注册页面
+    goSignup() {
+      //替换页面，无法退回之前页面
+      this.$router.replace('/signup')
     }
 
   }

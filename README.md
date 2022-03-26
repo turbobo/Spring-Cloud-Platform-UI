@@ -17,9 +17,26 @@ npm start
 # 2、安装项目依赖 cnpm install 
 # 启动服务 npm run dev
 
+# 若本地无法启动，将igthub上package.json和package-lock.json复制到本地重新 cnpm install
 
 # @标识src文件目录，不可以在module和dist目录中使用，其他地方都行
 # css使用 ~@来标识src路径
+
+# 管理员账户 admin / admin
+
+_____________________________________________________________
+#1、安装vue-cli最新版本
+#如果有旧版本，卸载旧版本 npm uninstall vue-cli -g
+#暗转新版本 npm install -g @vue/cli
+#
+#2、安装指定版本 vue-cli
+#查询可用版本 npm view vue-cli versions --json
+#安装指定版本 npm install -g vue-cli@2.9.6
+#npm install -g @vue/cli@版本号   （vue-cli3以上）
+#
+#3、查看当前版本
+#vue -V
+
 
 ```
 ### 功能预览

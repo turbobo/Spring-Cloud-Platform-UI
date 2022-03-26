@@ -113,7 +113,7 @@ let fetchPermissionInfo = async () => {
   await Promise.resolve()
 }
 // 免校验token白名单
-let whiteList = ['/login']
+let whiteList = ['/login','/signup']
 
 /**
  * 路由拦截
@@ -125,7 +125,9 @@ router.beforeEach(async (to, from, next) => {
   // 关闭搜索面板
   store.commit('d2admin/search/set', false)
   const token = util.cookies.get('token')
+  // debugger
   if (whiteList.indexOf(to.path) === -1) {
+    // debugger
     // 这里暂时将cookie里是否存有token作为验证是否登录的条件
     // 请根据自身业务需要修改
     if (token && token !== 'undefined') {
@@ -155,7 +157,13 @@ router.beforeEach(async (to, from, next) => {
       } else {
         next()
       }
-    } else {
+    }
+    // else if (to.name === 'signup') {
+    //   next({
+    //       name: 'signup'
+    //   })
+    // }
+    else {
       next()
     }
   }

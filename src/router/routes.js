@@ -60,11 +60,11 @@ const frameOut = [
     component: () => import('@/pages/login')
   },
   // 注册
-  // {
-  //   path: '/signup',
-  //   name: 'signup',
-  //   component: () => import('@/pages/signup')
-  // }
+  {
+    path: '/signup',
+    name: 'signup',
+    component: () => import('@/pages/signup')
+  }
 ]
 
 /**
