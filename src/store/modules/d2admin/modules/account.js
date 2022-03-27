@@ -132,7 +132,7 @@ export default {
      * @param {Object} param route {Object} 注册成功后定向的路由对象
      */
     signUp ({ dispatch }, {
-      vm,
+      vm,    // 参数为this
       username,
       password,
       uuid,
@@ -166,14 +166,24 @@ export default {
             await dispatch('load')  */
 
             // this.$message.info("注册成功！请重新登录");
-            // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址
-            const path = util.cookies.get('redirect')
+            // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址---不需要，直接跳转登录页面
+            // const path = util.cookies.get('redirect')
             // 根据是否存有重定向页面判断如何重定向
-            vm.$router.replace(path ? { path } : route)
-            // 删除 cookie 中保存的重定向页面
-            util.cookies.remove('redirect')
-          })
-          .catch(err => {
+            // vm.$router.replace(path ? { path } : route)
+
+            // console.log("AccountSignUp")
+
+            vm.$alert('注册成功！请登录', '用户登录', {
+              confirmButtonText: '确定',
+              callback: action => {
+                // 直接跳转登录页面
+                vm.$router.replace(route)
+
+                // 删除 cookie 中保存的重定向页面
+                util.cookies.remove('redirect')
+              }
+            });
+          }).catch(err => {
             console.log('err: ', err)
           })
     },
