@@ -25,7 +25,11 @@ export function getObj (id) {
 
 export function delObj (id) {
   return fetch({
-    url: '/api/admin/user/' + id,
+    //物理删除接口
+    // url: '/api/admin/user/' + id,
+
+    //逻辑删除
+    url: '/api/auth/jwt/logic/' + id,
     method: 'delete'
   })
 }

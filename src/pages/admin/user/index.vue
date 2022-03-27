@@ -27,9 +27,11 @@
     <el-table-column width="200" align="center" label="最后更新人"> <template slot-scope="scope" >
             <span>{{scope.row.updName}}</span>
           </template> </el-table-column>
-    <el-table-column align="center" label="操作" width="150" fixed="right"> <template slot-scope="scope" >
+    <el-table-column align="center" label="操作" width="200" fixed="right"> <template slot-scope="scope" >
     <el-button  v-permission:function="['userManager:btn_edit']" size="small" type="success" @click="handleUpdate(scope.row)">编辑
     </el-button>
+<!--    <el-button v-permission:function="['userManager:btn_del']" size="small" type="danger" @click="handleDisable(scope.row)">禁用
+    </el-button>-->
     <el-button v-permission:function="['userManager:btn_del']" size="small" type="danger" @click="handleDelete(scope.row)">删除
     </el-button>
       </template> </el-table-column>
@@ -137,7 +139,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        name: undefined
+        name: undefined,
+        status: 1  //账号启用状态
       },
       sexOptions: ['男', '女'],
       dialogFormVisible: false,
@@ -213,6 +216,9 @@ export default {
               this.list.splice(index, 1)
             })
         })
+    },
+    handleDisable (row){
+
     },
     create (formName) {
       const set = this.$refs
