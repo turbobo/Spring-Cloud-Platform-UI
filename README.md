@@ -16,6 +16,8 @@ npm start
 # 1、安装淘宝镜像依赖 npm install -g cnpm --registry=https://registry.npm.taobao.org 
 # 2、安装项目依赖 cnpm install 
 # 启动服务 npm run dev
+# 需要登录localhost:9572  直接登录192.168.0.102会有跨域问题
+
 
 # 若本地无法启动，将igthub上package.json和package-lock.json复制到本地重新 cnpm install
 
