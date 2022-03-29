@@ -1,3 +1,8 @@
+###开发笔记
+result['#text'] 也可以取json结果中的值，相当于：result.#text
+
+
+
 ### 后端工程地址
 ```
 Gitee：https://gitee.com/geek_qi/cloud-platform
@@ -18,6 +23,7 @@ npm start
 # 启动服务 npm run dev
 # 需要登录localhost:9572  直接登录192.168.0.102会有跨域问题
 
+# npm install -D @vue/runtime-core
 
 # 若本地无法启动，将igthub上package.json和package-lock.json复制到本地重新 cnpm install
 

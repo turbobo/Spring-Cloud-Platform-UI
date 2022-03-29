@@ -36,10 +36,16 @@
         <img :src="item.idView" class="image">
       </el-carousel-item>
     </el-carousel>
-    <!--热门歌单-->
-    <play-list class="section" title="个性推荐" path="song-sheet-detail" :playList="songList"></play-list>
-    <!--热门歌手-->
-    <play-list class="section" title="热门推荐" path="singer-detail" :playList="songList"></play-list>
+
+    <!-- 个性推荐 -->
+    <div class="recommend">
+      <m-recommend></m-recommend>
+    </div>
+
+    <!-- 个性推荐 -->
+<!--    <div class="recommend">
+      <m-recommend></m-recommend>
+    </div>-->
 
 
   </d2-container>
@@ -50,6 +56,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import Recommend from '@/components/music/Recommend.vue'
+
 export default {
   computed: {
     ...mapState('d2admin/releases', [
@@ -73,6 +81,10 @@ export default {
       songList : [], // 歌单列表
       singerList : [] // 歌手列表
     };
+  },
+  components: {
+    'm-recommend': Recommend,
+    // 'm-newmusic': NewSongs
   },
   methods: {
   }

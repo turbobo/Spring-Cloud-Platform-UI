@@ -1,4 +1,5 @@
 import request from '@/plugin/axios'
+import fetch from '@/plugin/axios'
 
 export function AccountLogin (data) {
   return request({
@@ -59,5 +60,16 @@ export function AccountSignUp (data) {
         background: 'rgba(0, 0, 0, 0.8)'
       }
     }
+  })
+}
+
+//获取歌曲列表
+export function IndexGetMusicList (){
+  // return request({
+  return fetch({
+    // url: '/api/auth/music/top',
+    url: '/api/auth/jwt/top',
+    method: 'get',
+    // params: query
   })
 }

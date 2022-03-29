@@ -1,5 +1,5 @@
 import util from '@/libs/util.js'
-import {AccountLogin, AccountLogout, AccountSignUp} from '@/api/sys/login'
+import {AccountLogin, AccountLogout, AccountSignUp, IndexGetMusicList} from '@/api/sys/login'
 
 export default {
   namespaced: true,
@@ -187,5 +187,7 @@ export default {
             console.log('err: ', err)
           })
     },
+
+
   }
 }

@@ -11,7 +11,8 @@ let componentMaps = {
   'groupTypeManager': () => import(/* webpackChunkName: "groupTypeManager" */'@/pages/admin/groupType'),
   'devFormManager': () => import(/* webpackChunkName: "devFormManager" */'@/pages/dev/build'),
   'codeManager': () => import(/* webpackChunkName: "codeManager" */'@/pages/dev/code'),
-  'onlineManager': () => import(/* webpackChunkName: "onlineManager" */'@/pages/admin/online')
+  'onlineManager': () => import(/* webpackChunkName: "onlineManager" */'@/pages/admin/online'),
+  // 'musicManager': () => import(/* webpackChunkName: "onlineManager" */'@/pages/admin/music')
 
 }
 files.keys().forEach((key) => {

@@ -165,9 +165,12 @@ export default {
   },
   methods: {
     getList () {
+      debugger
       this.listLoading = true
       page(this.listQuery)
         .then(response => {
+          console.log(response.total)
+          debugger
           this.list = response.rows
           this.total = response.total
           this.listLoading = false
