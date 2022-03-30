@@ -137,9 +137,10 @@ export default {
       });
     },
 
+    // @error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
     srcerr(item, index) {
       // if (/^err/.test(this.discList[index]["albumPic"])) {
-      // 刷新：this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
+      // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
       this.$set(this.discList[index], "albumPic", this.discList[index]["albumPic"])
       // } else {
       //   // if (!this.errobj[item]) {
@@ -265,6 +266,7 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-left: 10%;   //歌名、作者往左移动
     span:hover {cursor: pointer;}
     .author {
       font-size: 12px;

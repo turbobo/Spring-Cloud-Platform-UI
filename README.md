@@ -13,6 +13,7 @@ var fun2 = async function(){
 await fun1();
 }
 
+@error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
 this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
 
 ### 后端工程地址
