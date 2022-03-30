@@ -14,7 +14,7 @@
       <el-row :gutter="30">
         <el-col :span="6" v-for="(item,i) in discList" :key="i" class="disc-box-item">
           <el-card shadow="never">
-            <el-image :src="item.albumPic" @click="linksongsDisc(item.id)">
+            <el-image :src="item.albumPic" @error.once="srcerr(item, i)" @click="linksongsDisc(item.id)">
               <div slot="placeholder">
                 <i class="el-icon-picture-outline" style="font-size:162.5px;color:#f1f1f1"></i>
               </div>
@@ -53,7 +53,6 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      albumPic: null,
       listIndex: 0,
       typeList: [
         { name: '个性推荐', type: 0 }
@@ -83,7 +82,6 @@ export default {
     // this.getRecommendData()
     // this.getMusicList()
     this.getDiscList()
-    this.getAlbumPic()
   },
   methods: {
 
@@ -93,53 +91,70 @@ export default {
     //   this.queryData.type = this.typeList[item]
     //   this.getDiscList()
     // },
+
     async getDiscList() {
       // then异步执行
-      IndexGetMusicList().then(response => {
-        // console.log(response.rows)
+      await IndexGetMusicList().then(response => {
+        response.rows.forEach(item => {
+          axios.get('http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=7537459f592d916b49e697b8a0fb53df&artist='+item.artistName+'&album='+item.release+'&format=json')
+              .then((success) => {
+                item.albumPic = success.data.album.image[2]['#text'];
+                // console.log(success.image[2].text);
+                // this.albumPicMap.set(item.id, success.data.album.image[2]['#text'])
+              }, (error) => {
+                console.log(error);
+              })
+        })
         this.discList = response.rows
         this.total = response.total
+        console.log("this.discList");
+        console.log(this.discList);
         // 遍历获取专辑封面
         // if (this.discList != undefined){
         //   if (this.discList.length != 0) {
         //   }
         // }
-            this.discList.forEach(item => {
+           /* this.discList.forEach(item => {
               let query_release = item.release
               let query_artistName = item.artistName
               //查询图片
-              item.albumPic = this.getAlbumPic(query_release, query_artistName)
-              console.log("   ---"+this.getAlbumPic(query_release, query_artistName))
+              // item.albumPic = this.getAlbumPic(query_release, query_artistName)
+              // console.log("   ---"+this.getAlbumPic(query_release, query_artistName))
+              // this.albumPicMap.set(item.trackId, this.getAlbumPic(query_release, query_artistName))
               //http://ws.audioscrobbler.com/2.0/?method=album.getinfo
               // &api_key=7537459f592d916b49e697b8a0fb53df&artist=Taylor Swift&album=Fearless&format=json
               // arrData.push(arr)
-            })
-        console.log(this.discList)
+
+              axios.get('http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=7537459f592d916b49e697b8a0fb53df&artist='+query_artistName+'&album='+query_release+'&format=json')
+                  .then((success) => {
+                    // item.albumPic = success.image[2].text;
+                    // console.log(success.image[2].text);
+                    this.albumPicMap.set(item.id, success.data.album.image[2]['#text'])
+                  }, (error) => {
+                    console.log(error);
+                  })
+            })*/
       });
     },
-    getAlbumPic(release, artistName) {
-    // getAlbumPic() {
-    //   debugger
-      // this.discList.forEach(item => {
-      // })
-        //查询图片
-        // item.albumPic = getAlbumPic(query_release, query_artistName)
-        //http://ws.audioscrobbler.com/2.0/?method=album.getinfo
-        // &api_key=7537459f592d916b49e697b8a0fb53df&artist=Taylor Swift&album=Fearless&format=json
-        // arrData.push(arr)
-        axios.get('http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=7537459f592d916b49e697b8a0fb53df&artist='+artistName+'&album='+release+'&format=json')
-            .then((success) => {
-              // item.albumPic = success.image[2].text;
-              // console.log(success.image[2].text);
-              this.albumPic = success.data.album.image[2]['#text'];
-              // console.log("albumPic--"+albumPic);
-            }, (error) => {
-              console.log(error);
-            })
-      console.log("albumPic--"+this.albumPic);
 
-      return this.albumPic;
+    srcerr(item, index) {
+      // if (/^err/.test(this.discList[index]["albumPic"])) {
+      // 刷新：this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
+      this.$set(this.discList[index], "albumPic", this.discList[index]["albumPic"])
+      // } else {
+      //   // if (!this.errobj[item]) {
+      //   //   this.errobj[item] = 1
+      //   // } else {
+      //   //   if (this.errobj[item] > 2) {
+      //   //     return
+      //   //   } else {
+      //   //     this.errobj[item] += 1
+      //   //   }
+      //   // }
+      //   // this.$set(this.discList, index, 'err' + item)
+      // }
     },
+
     getRecommendData() {
       // const { data: res } = await this.$request.get('/personalized?limit=7')
       // this.recommendData = res.result
@@ -268,5 +283,8 @@ export default {
   //  padding: 20px 50px;
   //}
 
+  .el-card__body {
+    padding: 0px;
+  }
 }
 </style>

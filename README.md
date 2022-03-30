@@ -1,7 +1,19 @@
 ###开发笔记
 result['#text'] 也可以取json结果中的值，相当于：result.#text
 
+ES7的异步特性async / await，async修饰的异步方法，需要等待await修饰的语句执行完毕。
+这跟我们想要的同步请求效果一样，在执行完A事件，并成功返回后，才会去执行B事件。
+var fun1 = async function(){
+await axios.get(url,params);
 
+    ...
+}
+
+var fun2 = async function(){
+await fun1();
+}
+
+this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
 
 ### 后端工程地址
 ```
