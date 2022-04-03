@@ -120,7 +120,7 @@ export default {
     getMusicList() {
       // then异步执行
       IndexGetMusicList().then(response => {
-        console.log(response.rows)
+        // console.log(response.rows)
         this.musiclist = response.rows
         // res = response;
       });

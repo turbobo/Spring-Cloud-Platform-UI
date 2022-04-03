@@ -1,0 +1,17 @@
+// import layoutHeaderAside from '@/layout/header-aside'
+//
+// const meta = { requiresAuth: true }
+//
+// export default {
+//     path: '/manage',
+//     name: 'manage',
+//     meta,
+//     redirect: { name: 'manage-page1' },
+//     component: layoutHeaderAside,
+//     children: (pre => [
+//         { path: 'page1', name: `${pre}page1`, component: () => import('@/pages/manage/page1'), meta: { meta, title: '个性推荐' } },
+//         { path: 'page2', name: `${pre}page2`, component: () => import('@/pages/manage/page2'), meta: { meta, title: '热门推荐' } },
+//         // { path: 'page3', name: `${pre}page3`, component: () => import('@/pages/demo/page3'), meta: { meta, title: '页面 3' } },
+//         // { path: 'page4', name: `${pre}page4`, component: () => import('@/pages/demo/page4'), meta: { meta, title: '页面 4' } }
+//     ])('manage-')
+// }

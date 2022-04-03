@@ -63,13 +63,14 @@ export function AccountSignUp (data) {
   })
 }
 
-//获取歌曲列表
-export function IndexGetMusicList (){
+//获取个性化推荐歌曲列表
+export function GetPersonalizedSongList (){
   // return request({
   return fetch({
-    // url: '/api/auth/music/top',
-    url: '/api/auth/jwt/top',
+    url: '/api/auth/music/top',
+    // url: '/api/auth/jwt/music/top',
     method: 'get',
     // params: query
   })
 }
+

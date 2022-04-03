@@ -3,7 +3,7 @@ export default [
   { path: '/index', title: '首页', icon: 'home' },
   {
     path: '/demo',
-    title: '演示页面',
-    icon: 'folder-o'
+    title: '推荐页面',
+    icon: 'music'
   }
 ]

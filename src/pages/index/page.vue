@@ -31,7 +31,7 @@
 
 
     <!--轮播图2-->
-    <el-carousel class="swiper-container" type="card" height="20vw" :interval="4000">
+    <el-carousel class="swiper-container" type="card" height="175px" :interval="4000">
       <el-carousel-item v-for="item in imgList" :key="item.id">
         <img :src="item.idView" class="image">
       </el-carousel-item>
@@ -73,10 +73,15 @@ export default {
         //为动态路径时
         {id:0,idView:require("@/assets/images/fk.jpg")},
         */
-        {id:0,idView:require('@/assets/swiper/swiper0.jpg')},
-        {id:1,idView:require('@/assets/swiper/swiper1.jpg')},
-        {id:2,idView:require('@/assets/swiper/swiper2.jpg')},
-        {id:3,idView:require('@/assets/swiper/swiper3.jpg')}
+        // {id:0,idView:require('@/assets/swiper/swiper0.jpg')},
+        // {id:1,idView:require('@/assets/swiper/swiper1.jpg')},
+        // {id:2,idView:require('@/assets/swiper/swiper2.jpg')},
+        // {id:3,idView:require('@/assets/swiper/swiper3.jpg')}
+
+        {id:0,idView: 'http://p1.music.126.net/g5s2lovhPHitl2rg5y-UMg==/109951167220990974.jpg?imageView&quality=89'},
+        {id:1,idView: 'http://p1.music.126.net/QW62pPFBnh3TkUmJsCYROw==/109951167217511960.jpg?imageView&quality=89'},
+        {id:2,idView: 'http://p1.music.126.net/mr1OpWpgauqgAGvP5-wesg==/109951167217987524.jpg?imageView&quality=89'},
+        {id:3,idView: 'http://p1.music.126.net/pm0sIEB8GKP0VZcxNMh_DQ==/109951167217521773.jpg?imageView&quality=89'}
       ],
       songList : [], // 歌单列表
       singerList : [] // 歌手列表
