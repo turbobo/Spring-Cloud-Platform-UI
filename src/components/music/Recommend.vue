@@ -185,7 +185,8 @@ export default {
             // console.log(success.data.tracks.track);
             // this.topList = success.data.tracks.track
             // this.total = 5;
-            console.log(success)
+            // console.log("lastfm---")
+            // console.log(success)
             var tempAry = success.data.tracks.track;
             // console.log(tempAry.length)
             for (var i = 0; i < 5; i++) {
@@ -193,19 +194,29 @@ export default {
               tempObj.title = tempAry[i].name
               tempObj.artistName = tempAry[i].artist.name
               // tempObj.albumPic = tempAry[i].album.image[2]['#text']  //tempAry[i].image[2]['#text']
-              //获取专辑图片  -- await同步请求
+              //获取last.fm专辑图片  -- await同步请求
               await axios.get('http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=7537459f592d916b49e697b8a0fb53df&artist=' + tempObj.artistName + '&track=' + tempObj.title + '&format=json')
                   .then(async (success) => {
-                    // console.log("-------")
-                    // console.log(success)
+                    console.log("---album----")
+                    console.log(success)
+                    debugger
+                    var loadQQImage = true;
                     // console.log(success.data.track.album.image[2]['#text'])
-                    if (success.data.track.album != null) {
-                      if (success.data.track.album.image != null) {
-                        tempObj.albumPic = success.data.track.album.image[2]['#text'];
+                    if (success.data.track != null) {
+                      if (success.data.track.album != null) {
+                        if (success.data.track.album.image != null) {
+                          if (success.data.track.album.image[2]['#text'] != ''){
+                            tempObj.albumPic = success.data.track.album.image[2]['#text'];
+                            loadQQImage = false;
+                          }
+                        }
                       }
-                    } else {
+                    }
+                    debugger
+                    //加载QQ图片
+                    if (loadQQImage){
                       //没有专辑图片，请求QQ 接口：根据歌曲名搜索专辑
-/*                      await axios({
+                      /*await axios({
                         url: "https://c.y.qq.com/soso/fcgi-bin/client_search_cp??client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8",
                         baseURL: '',
                         method:'GET'
@@ -231,29 +242,45 @@ export default {
                           }, (error) => {
                             console.log(error);
                           })*/
-
+                      debugger
                       // 2
-                      axios.get("/qq/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8", { // 这里会匹配到前面我们设置的/proxy，代替为https://www.tianqiapi.com
+                      await axios.get("/qq/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8", { // 这里会匹配到前面我们设置的/proxy，代替为https://www.tianqiapi.com
                         // params: {
                         //   version: 'v6',
                         //   cityid: XXX,
                         //   appid: XXX,
                         //   appsecret: 'XXX'
                         // }
-                      }).then(function (response) {
-                        console.log("qq--response")
-                        console.log(response)
+                      }).then(function (success) {
+                        debugger
+                        console.log("qq--success")
+                        console.log(success)
+                        //匹配歌手
+                        var songList = success.data.data.album.list
+                        console.log("songList------")
+                        console.log(songList)
+                        for (var i = 0; i < songList.length; i++) {
+                          if (tempObj.artistName === songList[i].singerName){
+                            //匹配到则推出循环
+                            tempObj.albumPic = songList[i].albumPic
+                            break;
+                          }
+                          //匹配不到，则使用一张图片
+                          if (i == songList.length){
+                            tempObj.albumPic = songList[0].albumPic
+                          }
+                        }
+                        //匹配不到歌手，就用第一张图片
+
                       }).catch(function (error) {
                         console.log(error)
                       })
                     }
-                    // console.log(success.image[2].text);
-                    // this.albumPicMap.set(item.id, success.data.album.image[2]['#text'])
                   }, (error) => {
                     console.log(error);
                   })
               // tempObj.albumPic = tempAry[i].image[2]['#text']
-              // console.log(tempObj)
+              console.log(tempObj)
               this.topList.push(tempObj)
               // console.log("this.topLis")
               // console.log(this.topList)
@@ -283,6 +310,8 @@ export default {
     },
 
     topSrcError(item, index) {
+      console.log("topSrcError")
+      console.log(item)
       // if (/^err/.test(this.personalizedList[index]["albumPic"])) {
       // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
       this.$set(this.topList[index], "albumPic", this.topList[index]["albumPic"])
