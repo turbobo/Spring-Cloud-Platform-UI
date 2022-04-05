@@ -10,7 +10,24 @@ module.exports = {
   lintOnSave: false,
   devServer: {
     publicPath: baseUrl, // 和 baseUrl 保持一致
-    port: 9572
+    port: 9572,
+    // proxy: 'https://c.y.qq.com/soso/fcgi-bin',
+    proxy: {
+      // '/api': {
+      //   target: 'http://localhost:8080',
+      //   pathRewrite: {
+      //     '^/api': '/static/mock'
+      //   }
+      // },
+      '/qq': {
+        target: 'https://c.y.qq.com/soso/fcgi-bin', //请求的第三方接口
+        secure: false, // false为http访问，true为https访问
+        changeOrigin: true, // 跨域访问设置，true代表跨域
+        pathRewrite: { // 路径改写规则
+        '^/qq': ''  // 以 /qq 为开头的改写为 ''
+        }
+      }
+    }
   },
   css: {
     loaderOptions: {

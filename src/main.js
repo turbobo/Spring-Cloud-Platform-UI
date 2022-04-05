@@ -15,6 +15,9 @@ import d2Admin from '@/plugin/d2admin'
 import router from './router'
 import axios from 'axios'
 
+// var cors = require('cors');
+// Vue.use(cors());
+
 // 核心插件
 Vue.use(d2Admin, { store })
 // axios 放入vue原型对象上

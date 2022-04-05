@@ -16,6 +16,15 @@ await fun1();
 @error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
 this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
 
+### 热门推荐
+使用lastfm接口
+如果没有图片，那么调用qq音乐接口查询专辑图片，或者歌手图片
+
+### 相似推荐
+使用lastfm接口
+如果没有图片，那么调用qq音乐接口查询专辑图片，或者歌手图片
+
+
 ### 后端工程地址
 ```
 Gitee：https://gitee.com/geek_qi/cloud-platform

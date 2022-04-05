@@ -3,7 +3,7 @@
     <!--个性推荐-->
     <div class="">
       <ul class="" >
-        <li @click="goPersonalizedRec">个性推荐</li>
+        <li>个性推荐<span @click="goPersonalizedRec" class="songMore">查看更多>></span></li>
 <!--        <li
             v-for="(item,i) in typeList"
             :key="i"
@@ -16,7 +16,7 @@
       <el-row :gutter="30">
         <el-col :span="6" v-for="(item,i) in personalizedList" :key="i" class="disc-box-item">
           <el-card shadow="never">
-            <el-image :src="item.albumPic" @error.once="srcerr(item, i)" @click="linksongsDisc(item.id)">
+            <el-image :src="item.albumPic" @error.once="personnalizedSrcError(item, i)" @click="linksongsDisc(item.id)">
               <div slot="placeholder">
                 <i class="el-icon-picture-outline" style="font-size:162.5px;color:#f1f1f1"></i>
               </div>
@@ -47,14 +47,14 @@
     <!--热门推荐-->
     <div class="">
       <ul class="">
-        <li>热门推荐</li>
+        <li>热门推荐<span @click="goPersonalizedRec" class="songMore">查看更多>></span></li>
       </ul>
     </div>
     <div class="disc-box" style="height:100px;">
       <el-row :gutter="30">
         <el-col :span="6" v-for="(item,i) in topList" :key="i" class="disc-box-item">
           <el-card shadow="never">
-            <el-image :src="item.albumPic" @error.once="srcerr(item, i)" @click="linksongsDisc(item.id)">
+            <el-image :src="item.albumPic" @error.once="topSrcError(item, i)" @click="linksongsDisc(item.id)">
               <div slot="placeholder">
                 <i class="el-icon-picture-outline" style="font-size:162.5px;color:#f1f1f1"></i>
               </div>
@@ -147,7 +147,7 @@ export default {
               })
         })
         this.personalizedList = response.rows
-        this.total = response.total
+        // this.total = response.total
         // console.log("this.personalizedList");
         // console.log(this.personalizedList);
         // 遍历获取专辑封面
@@ -179,20 +179,84 @@ export default {
     },
 
     async getTopList() {
-      // then异步执行
-      axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
-          .then((success) => {
-            console.log(success.data.tracks.track);
-            this.topList = success.data.tracks.track
-            this.total = 5;
-
+      // then异步执行  await同步执行
+      await axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
+          .then(async (success) => {
+            // console.log(success.data.tracks.track);
+            // this.topList = success.data.tracks.track
+            // this.total = 5;
+            console.log(success)
             var tempAry = success.data.tracks.track;
-            for(var i=0; i<5; i++) {
+            // console.log(tempAry.length)
+            for (var i = 0; i < 5; i++) {
               var tempObj = {};
               tempObj.title = tempAry[i].name
               tempObj.artistName = tempAry[i].artist.name
-              tempObj.albumPic = tempAry[i].image[2]['#text']
+              // tempObj.albumPic = tempAry[i].album.image[2]['#text']  //tempAry[i].image[2]['#text']
+              //获取专辑图片  -- await同步请求
+              await axios.get('http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=7537459f592d916b49e697b8a0fb53df&artist=' + tempObj.artistName + '&track=' + tempObj.title + '&format=json')
+                  .then(async (success) => {
+                    // console.log("-------")
+                    // console.log(success)
+                    // console.log(success.data.track.album.image[2]['#text'])
+                    if (success.data.track.album != null) {
+                      if (success.data.track.album.image != null) {
+                        tempObj.albumPic = success.data.track.album.image[2]['#text'];
+                      }
+                    } else {
+                      //没有专辑图片，请求QQ 接口：根据歌曲名搜索专辑
+/*                      await axios({
+                        url: "https://c.y.qq.com/soso/fcgi-bin/client_search_cp??client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8",
+                        baseURL: '',
+                        method:'GET'
+                      }).*/
+                      // 1
+                      /*await axios.get("https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8")
+                      .then((success) => {
+                            console.log(success)
+                            //匹配歌手
+                            var songList = success.data.list
+                            for (var i = 0; i < 10; i++) {
+                              if (tempObj.artistName == songList[i].singerName){
+                                //匹配到则推出循环
+                                tempObj.albumPic = songList[i].albumPic
+                                break;
+                              }
+                              //匹配不到，则使用一张图片
+                              if (i == 10){
+                                tempObj.albumPic = songList[0].albumPic
+                              }
+                            }
+                            //匹配不到歌手，就用第一张图片
+                          }, (error) => {
+                            console.log(error);
+                          })*/
+
+                      // 2
+                      axios.get("/qq/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8", { // 这里会匹配到前面我们设置的/proxy，代替为https://www.tianqiapi.com
+                        // params: {
+                        //   version: 'v6',
+                        //   cityid: XXX,
+                        //   appid: XXX,
+                        //   appsecret: 'XXX'
+                        // }
+                      }).then(function (response) {
+                        console.log("qq--response")
+                        console.log(response)
+                      }).catch(function (error) {
+                        console.log(error)
+                      })
+                    }
+                    // console.log(success.image[2].text);
+                    // this.albumPicMap.set(item.id, success.data.album.image[2]['#text'])
+                  }, (error) => {
+                    console.log(error);
+                  })
+              // tempObj.albumPic = tempAry[i].image[2]['#text']
+              // console.log(tempObj)
               this.topList.push(tempObj)
+              // console.log("this.topLis")
+              // console.log(this.topList)
             }
           }, (error) => {
             console.log(error);
@@ -200,10 +264,28 @@ export default {
     },
 
     // @error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
-    srcerr(item, index) {
+    personnalizedSrcError(item, index) {
       // if (/^err/.test(this.personalizedList[index]["albumPic"])) {
       // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
       this.$set(this.personalizedList[index], "albumPic", this.personalizedList[index]["albumPic"])
+      // } else {
+      //   // if (!this.errobj[item]) {
+      //   //   this.errobj[item] = 1
+      //   // } else {
+      //   //   if (this.errobj[item] > 2) {
+      //   //     return
+      //   //   } else {
+      //   //     this.errobj[item] += 1
+      //   //   }
+      //   // }
+      //   // this.$set(this.personalizedList, index, 'err' + item)
+      // }
+    },
+
+    topSrcError(item, index) {
+      // if (/^err/.test(this.personalizedList[index]["albumPic"])) {
+      // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
+      this.$set(this.topList[index], "albumPic", this.topList[index]["albumPic"])
       // } else {
       //   // if (!this.errobj[item]) {
       //   //   this.errobj[item] = 1
@@ -361,10 +443,25 @@ export default {
 ul{
   list-style: none;
   color: rgba(0, 0, 0, 0.6);
-  :hover {
+  /*:hover {
     color: rgba(0, 0, 0, 0.9);
     color: #0969da;
     cursor: pointer;
-    }
+    }*/
+}
+.songMore{
+  font-size: 10px;
+  padding-left: 10px;
+  color: rgba(0, 0, 0, 0.6);
+  //:hover {
+  //  color: rgba(0, 0, 0, 0.9);
+  //  color: #0969da;
+  //  cursor: pointer;
+  //}
+}
+.songMore:hover {
+  color: rgba(0, 0, 0, 0.9);
+  color: #0969da;
+  cursor: pointer;
 }
 </style>
