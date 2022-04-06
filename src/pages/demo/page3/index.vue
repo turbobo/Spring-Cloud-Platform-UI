@@ -21,6 +21,9 @@
             <el-table-column
                 type="index"
             >
+              <template slot-scope="scope">
+                {{ scope.$index + (currentPage - 1) * pageSize + 1 }}
+              </template>
             </el-table-column>
             <el-table-column
                 prop="title"
@@ -73,8 +76,10 @@
 
 <script>
 import axios from 'axios'
+import {GetPersonalizedSongList} from "@/api/sys/login";
 
 export default {
+  //请求后台获取热门歌曲
   name: 'page2',
   created() {
     this.getTopList()
@@ -144,6 +149,51 @@ export default {
           }, (error) => {
             console.log(error);
           })
+    },
+
+    async getTopList2() {
+      // then异步执行
+      await GetPersonalizedSongList().then(response => {
+        response.rows.forEach(item => {
+          axios.get('http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=7537459f592d916b49e697b8a0fb53df&artist='+item.artistName+'&album='+item.release+'&format=json')
+              .then((success) => {
+                item.albumPic = success.data.album.image[2]['#text'];
+                // console.log(success.image[2].text);
+                // this.albumPicMap.set(item.id, success.data.album.image[2]['#text'])
+              }, (error) => {
+                console.log(error);
+              })
+        })
+        this.personalizedList = response.rows
+        // this.total = response.total
+        // console.log("this.personalizedList");
+        // console.log(this.personalizedList);
+        // 遍历获取专辑封面
+        // if (this.personalizedList != undefined){
+        //   if (this.personalizedList.length != 0) {
+        //   }
+        // }
+        /* this.personalizedList.forEach(item => {
+           let query_release = item.release
+           let query_artistName = item.artistName
+           //查询图片
+           // item.albumPic = this.getAlbumPic(query_release, query_artistName)
+           // console.log("   ---"+this.getAlbumPic(query_release, query_artistName))
+           // this.albumPicMap.set(item.trackId, this.getAlbumPic(query_release, query_artistName))
+           //http://ws.audioscrobbler.com/2.0/?method=album.getinfo
+           // &api_key=7537459f592d916b49e697b8a0fb53df&artist=Taylor Swift&album=Fearless&format=json
+           // arrData.push(arr)
+
+           axios.get('http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=7537459f592d916b49e697b8a0fb53df&artist='+query_artistName+'&album='+query_release+'&format=json')
+               .then((success) => {
+                 // item.albumPic = success.image[2].text;
+                 // console.log(success.image[2].text);
+                 this.albumPicMap.set(item.id, success.data.album.image[2]['#text'])
+               }, (error) => {
+                 console.log(error);
+               })
+         })*/
+      });
     },
 
     /**

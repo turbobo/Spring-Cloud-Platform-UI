@@ -78,6 +78,7 @@
 import axios from 'axios'
 
 export default {
+  //前端获取热门歌曲
   name: 'page2',
   created() {
     this.getTopList()

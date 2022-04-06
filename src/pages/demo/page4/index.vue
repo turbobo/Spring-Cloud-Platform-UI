@@ -15,12 +15,15 @@
       <div>
         <template>
           <el-table
-              :data="topList"
+              :data="topList.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
               stripe
               style="width: 100%">
             <el-table-column
                 type="index"
             >
+              <template slot-scope="scope">
+                {{ scope.$index + (currentPage - 1) * pageSize + 1 }}
+              </template>
             </el-table-column>
             <el-table-column
                 prop="title"
@@ -57,14 +60,13 @@
         </template>
         <div class="main-page">
           <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page="(queryData.offset/queryData.limit) + 1"
-              :page-size="queryData.limit"
-              layout="total, prev, pager, next"
-              :total="total"
               background
-              :small="true"
-          ></el-pagination>
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-size="pageSize"
+              layout="total,prev,pager,next"
+              :total="topList.length" >
+          </el-pagination>
         </div>
 
       </div>
@@ -76,24 +78,17 @@
 import axios from 'axios'
 
 export default {
-  //热门推荐备用页面
+  //前端获取热门歌曲---备用页面
   name: 'page2',
   created() {
     this.getTopList()
   },
   data() {
     return {
-      topList: [],
-      queryData: {
-        type: 0,
-        offset: 0,
-        limit: 10
-      },
-      total: 0,
-
-      musicdata: [],
-      queryNum: 10,
-      // scrollStatus: false
+      // topList: [],
+      currentPage: 1,  // 当前页码
+      pageSize: 10,  // 每页显示的行数
+      topList: [],  // 表格数据
     }
   },
   methods: {
@@ -197,10 +192,14 @@ export default {
       this.discList = res.albums
       this.total = res.total
     },
-    handleCurrentChange(pagenum) {
-      this.queryData.offset = (pagenum - 1) * this.queryData.limit
-      this.getDiscList()
-    },
+    // handleCurrentChange(pagenum) {
+    //   this.queryData.offset = (pagenum - 1) * this.queryData.limit
+    //   this.getDiscList()
+    // },
+    // 页面切换方法
+    handleCurrentChange(val) {
+      this.currentPage = val;
+    }
   },
 }
 </script>
