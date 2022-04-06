@@ -55,7 +55,7 @@ const frameIn = [
       {
         path: 'detail',
         name: 'detail',
-        meta: { meta, title: '个性推荐' },
+        meta: { meta, title: '音乐详情' },
         component: () => import('@/pages/detail')
       },
     ]

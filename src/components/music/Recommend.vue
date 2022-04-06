@@ -85,8 +85,7 @@
 </template>
 
 <script>
-import {GetPersonalizedSongList, GetTopSongList} from "@/api/sys/login";
-import {mapActions} from "_vuex@3.6.2@vuex";
+import {GetPersonalizedSongList} from "@/api/sys/login";
 import axios from 'axios'
 
 export default {
@@ -250,7 +249,6 @@ export default {
                         //   appsecret: 'XXX'
                         // }
                       }).then(function (success) {
-                        debugger
                         // console.log("qq--success")
                         // console.log(success)
                         //匹配歌手

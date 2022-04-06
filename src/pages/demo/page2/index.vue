@@ -1,49 +1,52 @@
 <template>
   <d2-container>
     <div>
-<!--    <div class="new-list">
-      <ul class="new-header-list">
-        <li
-            v-for="(item,i) in typeList"
-            :key="i"
-            :class="listIndex === i ? 'select' : ''"
-            @click="listchange(i)"
-        >{{item.name}}</li>
-      </ul>
-      <el-button type="danger" size="mini" @click="playMusicAtonce(musiclist)">立即播放</el-button>
-    </div>-->
+      <!--    <div class="new-list">
+            <ul class="new-header-list">
+              <li
+                  v-for="(item,i) in typeList"
+                  :key="i"
+                  :class="listIndex === i ? 'select' : ''"
+                  @click="listchange(i)"
+              >{{item.name}}</li>
+            </ul>
+            <el-button type="danger" size="mini" @click="playMusicAtonce(musiclist)">立即播放</el-button>
+          </div>-->
       <div>
         <template>
           <el-table
-              :data="topList"
+              :data="topList.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
               stripe
               style="width: 100%">
             <el-table-column
                 type="index"
-                >
+            >
+              <template slot-scope="scope">
+                {{ scope.$index + (currentPage - 1) * pageSize + 1 }}
+              </template>
             </el-table-column>
             <el-table-column
                 prop="title"
                 label="歌曲名"
                 width="250"
-                >
+            >
             </el-table-column>
             <el-table-column
                 prop="artistName"
                 label="作者"
-                >
+            >
             </el-table-column>
             <el-table-column
                 prop="release"
                 label="专辑"
                 width="280"
-                >
+            >
             </el-table-column>
             <el-table-column
                 prop="duration"
                 label="时长"
                 :formatter="Formatter"
-                >
+            >
             </el-table-column>
             <el-table-column
                 fixed="right"
@@ -57,14 +60,13 @@
         </template>
         <div class="main-page">
           <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page="(queryData.offset/queryData.limit) + 1"
-              :page-size="queryData.limit"
-              layout="total, prev, pager, next"
-              :total="total"
               background
-              :small="true"
-          ></el-pagination>
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-size="pageSize"
+              layout="total,prev,pager,next"
+              :total="topList.length" >
+          </el-pagination>
         </div>
 
       </div>
@@ -73,7 +75,7 @@
 </template>
 
 <script>
-import axios from "_axios@0.17.1@axios";
+import axios from 'axios'
 
 export default {
   name: 'page2',
@@ -82,17 +84,10 @@ export default {
   },
   data() {
     return {
-      topList: [],
-      queryData: {
-        type: 0,
-        offset: 0,
-        limit: 10
-      },
-      total: 0,
-
-      musicdata: [],
-      queryNum: 10,
-      // scrollStatus: false
+      // topList: [],
+      currentPage: 1,  // 当前页码
+      pageSize: 10,  // 每页显示的行数
+      topList: [],  // 表格数据
     }
   },
   methods: {
@@ -189,10 +184,21 @@ export default {
     },
 
 
-    handleCurrentChange(pagenum) {
-      this.queryData.offset = (pagenum - 1) * this.queryData.limit
-      this.getTopList()
+    async getDiscList() {
+      const { data: res } = await this.$request.get('/top/album', {
+        params: this.queryData
+      })
+      this.discList = res.albums
+      this.total = res.total
     },
+    // handleCurrentChange(pagenum) {
+    //   this.queryData.offset = (pagenum - 1) * this.queryData.limit
+    //   this.getDiscList()
+    // },
+    // 页面切换方法
+    handleCurrentChange(val) {
+      this.currentPage = val;
+    }
   },
 }
 </script>
