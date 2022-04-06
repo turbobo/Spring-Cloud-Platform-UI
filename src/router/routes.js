@@ -1,5 +1,4 @@
 import demo from './modules/demo'
-// import demo from './modules/manage'
 import layoutHeaderAside from '@/layout/header-aside'
 
 const meta = { requiresAuth: true }
@@ -47,7 +46,20 @@ const frameIn = [
     ]
   },
   demo,
-  // manage
+  {
+    path: '/detail',
+    name: 'detail',
+    component: layoutHeaderAside,
+    children: [
+      // 首页 必须 name:index
+      {
+        path: 'detail',
+        name: 'detail',
+        meta: { meta, title: '个性推荐' },
+        component: () => import('@/pages/detail')
+      },
+    ]
+  }
 
 ]
 

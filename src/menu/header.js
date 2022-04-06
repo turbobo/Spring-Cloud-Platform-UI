@@ -5,5 +5,6 @@ export default [
     path: '/demo',
     title: '推荐页面',
     icon: 'music'
-  }
+  },
+  // { path: '/detail', title: '音乐详情', icon: 'list' },
 ]

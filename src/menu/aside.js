@@ -9,8 +9,8 @@ export default [
     // icon: 'folder-o',
     icon: 'music',
     children: [
-      { path: '/demo/page1', title: '个性推荐' },
-      { path: '/demo/page2', title: '热门推荐' },
+      { path: '/demo/page1', title: '个性推荐', icon: 'play-circle'},
+      { path: '/demo/page2', title: '热门推荐', icon: 'play-circle'},
       // { path: '/demo/page3', title: '页面 3' },
       // {
       //   title: 'page4',
@@ -19,5 +19,9 @@ export default [
       //   ]
       // }
     ]
-  }
+  },
+  {
+    path: '/detail', title: '音乐详情', icon: 'list'
+  },
+
 ]

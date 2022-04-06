@@ -47,7 +47,7 @@
     <!--热门推荐-->
     <div class="">
       <ul class="">
-        <li>热门推荐<span @click="goPersonalizedRec" class="songMore">查看更多>></span></li>
+        <li>热门推荐<span @click="goTopRec" class="songMore">查看更多>></span></li>
       </ul>
     </div>
     <div class="disc-box" style="height:100px;">
@@ -199,7 +199,6 @@ export default {
                   .then(async (success) => {
                     console.log("---album----")
                     console.log(success)
-                    debugger
                     var loadQQImage = true;
                     // console.log(success.data.track.album.image[2]['#text'])
                     if (success.data.track != null) {
@@ -212,7 +211,7 @@ export default {
                         }
                       }
                     }
-                    debugger
+                    // debugger
                     //加载QQ图片
                     if (loadQQImage){
                       //没有专辑图片，请求QQ 接口：根据歌曲名搜索专辑
@@ -242,7 +241,6 @@ export default {
                           }, (error) => {
                             console.log(error);
                           })*/
-                      debugger
                       // 2
                       await axios.get("/qq/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8", { // 这里会匹配到前面我们设置的/proxy，代替为https://www.tianqiapi.com
                         // params: {
@@ -253,25 +251,23 @@ export default {
                         // }
                       }).then(function (success) {
                         debugger
-                        console.log("qq--success")
-                        console.log(success)
+                        // console.log("qq--success")
+                        // console.log(success)
                         //匹配歌手
                         var songList = success.data.data.album.list
-                        console.log("songList------")
-                        console.log(songList)
+                        // console.log("songList------")
+                        // console.log(songList)
                         for (var i = 0; i < songList.length; i++) {
                           if (tempObj.artistName === songList[i].singerName){
                             //匹配到则推出循环
                             tempObj.albumPic = songList[i].albumPic
                             break;
                           }
-                          //匹配不到，则使用一张图片
+                          //匹配不到，则使用一张图片：已经最后一张，还没break
                           if (i == songList.length){
                             tempObj.albumPic = songList[0].albumPic
                           }
                         }
-                        //匹配不到歌手，就用第一张图片
-
                       }).catch(function (error) {
                         console.log(error)
                       })
@@ -357,7 +353,10 @@ export default {
       //替换页面，无法退回之前页面
       this.$router.replace('/demo/page1')
     },
-
+    goTopRec(){
+      //替换页面，无法退回之前页面
+      this.$router.replace('/demo/page2')
+    },
     getArrayData(data, start, num) {
       const res = []
       const length =
