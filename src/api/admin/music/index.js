@@ -44,3 +44,37 @@ export function putObj (id, obj) {
     data: obj
   })
 }
+
+//获取个性化推荐歌曲列表
+export function GetPersonalizedSongList (){
+  // return request({
+  return fetch({
+    url: '/api/auth/music/personalized',
+    // url: '/api/auth/jwt/music/top',
+    method: 'get',
+    // params: query
+  })
+}
+
+//获取热门推荐歌曲列表
+export function GetTopSongList (){
+  // return request({
+  return fetch({
+    url: '/api/auth/music/top',
+    // url: '/api/auth/jwt/music/top',
+    method: 'get',
+    // params: query
+  })
+}
+
+//获取热门推荐歌曲列表+歌曲时长
+export function GetTopSongListAndDuration (){
+  // return request({
+  return fetch({
+    url: '/api/auth/music/topDuration',
+    // url: '/api/auth/jwt/music/top',
+    method: 'get',
+    // params: query
+  })
+}
+

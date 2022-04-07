@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import {GetPersonalizedSongList} from "@/api/sys/login";
+import {GetPersonalizedSongList,GetTopSongList} from "@/api/admin/music";
 import axios from 'axios'
 
 export default {
@@ -115,13 +115,15 @@ export default {
         page: 1,
         limit: 20,
       },
+      listLoading: true,
     }
   },
   created() {
     // this.getRecommendData()
     // this.getMusicList()
     this.getPersonalizedList()
-    this.getTopList()
+    // this.getTopList()
+    this.getTopMusicList()
   },
   methods: {
 
@@ -177,6 +179,7 @@ export default {
       });
     },
 
+    //前端获取热门歌曲
     async getTopList() {
       // then异步执行  await同步执行
       await axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
@@ -323,7 +326,7 @@ export default {
       // }
     },
 
-    getRecommendData() {
+/*    getRecommendData() {
       // const { data: res } = await this.$request.get('/personalized?limit=7')
       // this.recommendData = res.result
     },
@@ -333,7 +336,7 @@ export default {
     getPlayList(id) {
       window.sessionStorage.setItem('playListId', id)
       this.$router.push('playlist')
-    },
+    },*/
 
     // async getMusicList() {
     /*getMusicList() {
@@ -355,6 +358,7 @@ export default {
       //替换页面，无法退回之前页面
       this.$router.replace('/demo/page2')
     },
+
     getArrayData(data, start, num) {
       const res = []
       const length =
@@ -365,19 +369,18 @@ export default {
       return res
     },
 
-    // 获取音乐播放地址
-    async getMusicUrl(obj) {
-      const { data: res } = await this.$request.get('/api/auth/jwt/top')
-      let music = {}
-      music = {
-        title: obj.name,
-        artist: obj.author.join(' '),
-        src: res.data[0].url,
-        pic: obj.pic,
-        id: obj.id
-      }
-      window.sessionStorage.setItem('nowMusic', JSON.stringify(music))
-      this.$store.dispatch('dealAutoPlay', music)
+    // 后台获取热门歌曲
+    async getTopMusicList() {
+      // this.listLoading = true
+      GetTopSongList()
+          .then(response => {
+            // console.log("GetTopSongList***********")
+            // console.log(response)
+            this.topList = response.rows.slice(0,5)
+            // this.list = response.rows
+            // this.total = response.total
+            // this.listLoading = false
+          })
     },
     handleCurrentChange(pagenum) {
       // this.queryData.offset = (pagenum - 1) * this.queryData.limit

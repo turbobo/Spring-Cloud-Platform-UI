@@ -40,12 +40,13 @@
                 prop="release"
                 label="专辑"
                 width="280"
+                :formatter="releaseFormatter"
             >
             </el-table-column>
             <el-table-column
                 prop="duration"
                 label="时长"
-                :formatter="Formatter"
+                :formatter="durationFormatter"
             >
             </el-table-column>
             <el-table-column
@@ -65,7 +66,7 @@
               :current-page="currentPage"
               :page-size="pageSize"
               layout="total,prev,pager,next"
-              :total="topList.length" >
+              :total="topList.length">
           </el-pagination>
         </div>
 
@@ -76,12 +77,14 @@
 
 <script>
 import axios from 'axios'
+import {GetTopSongListAndDuration} from "@/api/admin/music";
 
 export default {
   //前端获取热门歌曲
   name: 'page2',
   created() {
     this.getTopList()
+    // this. getTopListVue()
   },
   data() {
     return {
@@ -92,13 +95,14 @@ export default {
     }
   },
   methods: {
-    async getTopList() {
+    //前端获取歌曲时长
+    async getTopListVue() {
       // async异步执行  await或者不加修饰为同步执行
       await axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
           .then(async (success) => {
             // console.log(success.data.tracks.track);
             // this.topList = success.data.tracks.track
-            this.total =success.data.tracks.track.length;
+            this.total = success.data.tracks.track.length;
             var tempAry = success.data.tracks.track;
             for (var i = 0; i < tempAry.length; i++) {
               var tempObj = {};
@@ -113,14 +117,14 @@ export default {
                     // console.log("---qq----")
                     // console.log(success)
                     //匹配歌手
-                    if (success.data.data != null){
-                      if (success.data.data.song != null){
+                    if (success.data.data != null) {
+                      if (success.data.data.song != null) {
                         var songList = success.data.data.song.list
                         // console.log("songList------")
                         // console.log(songList)
                         for (var i = 0; i < songList.length; i++) {  //匹配歌曲
                           for (var j = 0; j < songList[i].singer.length; j++) {  //匹配歌手
-                            if (tempObj.artistName === songList[i].singer[j].name){
+                            if (tempObj.artistName === songList[i].singer[j].name) {
                               //匹配到则推出循环
                               tempObj.release = songList[i].albumname
                               tempObj.duration = songList[i].interval
@@ -128,7 +132,7 @@ export default {
                             }
                           }
                           //匹配不到，则使用第一个专辑：已经最后一个，还没匹配到
-                          if (i == songList.length-1){
+                          if (i == songList.length - 1) {
                             tempObj.release = songList[0].albumname
                             tempObj.duration = songList[0].interval
                           }
@@ -149,44 +153,62 @@ export default {
             console.log(error);
           })
     },
+    //后端获取歌曲时长
+    async getTopList() {
+      GetTopSongListAndDuration()
+          .then(response => {
+            // console.log("GetTopSongList***********")
+            // console.log(response)
+            this.topList = response.rows
+            // this.list = response.rows
+            // this.total = response.total
+            // this.listLoading = false
+          })
+    },
 
     /**
      * 将秒转换为 分:秒
      * s int 秒数
      * 不需要 async修饰
      */
-    Formatter(row) {
-      if (row.duration != null && row.duration != ""){
+    durationFormatter(row) {
+      if (row.duration != null && row.duration != "") {
         //计算分钟
         //算法：将秒数除以60，然后下舍入，既得到分钟数
         var sec = row.duration;
         var h;
-        h  =   Math.floor(sec/60);
+        h = Math.floor(sec / 60);
         //计算秒
         //算法：取得秒%60的余数，既得到秒数
-        sec  =   sec % 60;
+        sec = sec % 60;
         //将变量转换为字符串
-        h    +=    '';
-        sec    +=    '';
+        h += '';
+        sec += '';
         //如果只有一位数，前面增加一个0
-        h  =   (h.length==1)?'0'+h:h;
-        sec  =   (sec.length==1)?'0'+sec:sec;
-        return h+':'+sec;
+        h = (h.length == 1) ? '0' + h : h;
+        sec = (sec.length == 1) ? '0' + sec : sec;
+        return h + ':' + sec;
       }
-      return ""
+      return "未知";
+    },
+    releaseFormatter(row) {
+      if (row.release == null || row.duration == ""){
+        return "未知";
+      }
+      return row.release;
     },
 
     goDetailPage(row) {
       // 跳转到Goods.vue商品详情页面,name为Goods.vue页面路由配置里的的name属性
       this.$router.push({
-        name:"detail",
+        name: "detail",
         // query:{goodsId:this.goodsId}
       })
     },
 
 
     async getDiscList() {
-      const { data: res } = await this.$request.get('/top/album', {
+      const {data: res} = await this.$request.get('/top/album', {
         params: this.queryData
       })
       this.discList = res.albums
@@ -210,12 +232,14 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
   .el-image {
     width: 50px;
     height: 50px;
     border-radius: 4px;
     margin-right: 10px;
   }
+
   span {
     display: inline-block;
     width: 180px;
@@ -224,17 +248,21 @@ export default {
     overflow: hidden;
   }
 }
+
 .new-list {
   position: relative;
   height: 40px;
   line-height: 40px;
+
   .new-header-list {
     display: block;
     list-style-type: none;
+
     .select {
       font-weight: 600;
       color: #000;
     }
+
     li {
       float: left;
       margin-right: 15px;
@@ -242,10 +270,12 @@ export default {
       color: rgba(0, 0, 0, 0.6);
       cursor: pointer;
     }
+
     li:hover {
       color: rgba(0, 0, 0, 0.9);
     }
   }
+
   .el-button {
     position: absolute;
     right: 20px;
@@ -253,10 +283,12 @@ export default {
     top: 5px;
   }
 }
+
 .main-song-list {
   height: 420px;
   overflow: scroll;
 }
+
 .main-page {
   width: 350px;
   margin: 0 auto;
