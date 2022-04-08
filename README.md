@@ -13,8 +13,15 @@ var fun2 = async function(){
 await fun1();
 }
 
+
 @error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
 this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
+
+###页面跳转 注意router和route
+this.$router 全局的路由器对象
+this.$route 当前路由对象
+传递参数 – this.$router.push({name: ’ 路由的name ', params: {key: value}})
+参数取值 – this.$route.params.key
 
 ### 热门推荐
 使用lastfm接口

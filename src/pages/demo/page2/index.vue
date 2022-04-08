@@ -199,21 +199,21 @@ export default {
     },
 
     goDetailPage(row) {
-      // 跳转到Goods.vue商品详情页面,name为Goods.vue页面路由配置里的的name属性
+      // debugger
       this.$router.push({
-        name: "detail",
-        // query:{goodsId:this.goodsId}
+        name: 'detail',
+        params: row,
       })
     },
 
 
-    async getDiscList() {
-      const {data: res} = await this.$request.get('/top/album', {
-        params: this.queryData
-      })
-      this.discList = res.albums
-      this.total = res.total
-    },
+    // async getDiscList() {
+    //   const {data: res} = await this.$request.get('/top/album', {
+    //     params: this.queryData
+    //   })
+    //   this.discList = res.albums
+    //   this.total = res.total
+    // },
     // handleCurrentChange(pagenum) {
     //   this.queryData.offset = (pagenum - 1) * this.queryData.limit
     //   this.getDiscList()

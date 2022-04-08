@@ -16,7 +16,7 @@
       <el-row :gutter="30">
         <el-col :span="6" v-for="(item,i) in personalizedList" :key="i" class="disc-box-item">
           <el-card shadow="never">
-            <el-image :src="item.albumPic" @error.once="personnalizedSrcError(item, i)" @click="linksongsDisc(item.id)">
+            <el-image :src="item.albumPic" @error.once="personnalizedSrcError(item, i)" @click="linksongsDisc(item)">
               <div slot="placeholder">
                 <i class="el-icon-picture-outline" style="font-size:162.5px;color:#f1f1f1"></i>
               </div>
@@ -44,6 +44,7 @@
       </div>-->
     </div>
 
+    <br>
     <!--热门推荐-->
     <div class="">
       <ul class="">

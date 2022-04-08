@@ -31,6 +31,12 @@ const router = new VueRouter({
   routes
 })
 
+//解决 连续点击相同路由导致报错(不影响正常操作行为)
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
 // eslint-disable-next-line one-var
 let permissionMenu, permissionRouter, permissionHeader = []
 let userInfo = {}
