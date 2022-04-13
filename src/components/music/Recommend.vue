@@ -44,7 +44,6 @@
       </div>-->
     </div>
 
-    <br>
     <!--热门推荐-->
     <div class="">
       <ul class="">
@@ -86,7 +85,7 @@
 </template>
 
 <script>
-import {GetPersonalizedSongList,GetTopSongList} from "@/api/admin/music";
+import {GetPersonalizedSongList, GetTopSongList, GetTopSongListAndDuration} from "@/api/admin/music";
 import axios from 'axios'
 
 export default {
@@ -278,13 +277,13 @@ export default {
                     console.log(error);
                   })
               // tempObj.albumPic = tempAry[i].image[2]['#text']
-              console.log(tempObj)
+              // console.log(tempObj)
               this.topList.push(tempObj)
               // console.log("this.topLis")
               // console.log(this.topList)
             }
           }, (error) => {
-            console.log(error);
+            // console.log(error);
           })
     },
 
@@ -386,6 +385,17 @@ export default {
     handleCurrentChange(pagenum) {
       // this.queryData.offset = (pagenum - 1) * this.queryData.limit
       // this.getpersonalizedList()
+    },
+    async getTopDurationList() {
+      GetTopSongListAndDuration()
+          .then(response => {
+            // console.log("GetTopSongList***********")
+            // console.log(response)
+            this.topList = response.rows
+            // this.list = response.rows
+            // this.total = response.total
+            // this.listLoading = false
+          })
     },
 
   },
