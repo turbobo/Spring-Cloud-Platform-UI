@@ -83,7 +83,7 @@ export default {
   //前端获取热门歌曲
   name: 'page2',
   created() {
-    this.getTopList()
+    this.getTopListAndDuration()
     // this. getTopListVue()
   },
   data() {
@@ -154,15 +154,21 @@ export default {
           })
     },
     //后端获取歌曲时长
-    async getTopList() {
+    async getTopListAndDuration() {
+      // 开始加载
+      let loading = this.$loading({
+        lock: true,//lock的修改符--默认是false
+        text: "加载中，请稍候...",//显示在加载图标下方的加载文案
+        background: "rgba(0,0,0,0.8)",//遮罩层颜色
+        spinner: "el-icon-loading",//自定义加载图标类名
+      });
       GetTopSongListAndDuration()
           .then(response => {
             // console.log("GetTopSongList***********")
             // console.log(response)
             this.topList = response.rows
-            // this.list = response.rows
-            // this.total = response.total
-            // this.listLoading = false
+            // 获取数据显示成功后，关闭loading
+            loading.close();
           })
     },
 

@@ -16,7 +16,7 @@
       <el-row :gutter="30">
         <el-col :span="6" v-for="(item,i) in personalizedList" :key="i" class="disc-box-item">
           <el-card shadow="never">
-            <el-image :src="item.albumPic" @error.once="personnalizedSrcError(item, i)" @click="linksongsDisc(item)">
+            <el-image :src="item.albumPic" @error.once="personnalizedSrcError(item, i)">
               <div slot="placeholder">
                 <i class="el-icon-picture-outline" style="font-size:162.5px;color:#f1f1f1"></i>
               </div>
@@ -54,7 +54,8 @@
       <el-row :gutter="30">
         <el-col :span="6" v-for="(item,i) in topList" :key="i" class="disc-box-item">
           <el-card shadow="never">
-            <el-image :src="item.albumPic" @error.once="topSrcError(item, i)" @click="linksongsDisc(item.id)">
+<!--            <el-image :src="item.albumPic" @error.once="topSrcError(item, i)" @click="linksongsDisc(item.id)">-->
+            <el-image :src="item.albumPic" @error.once="topSrcError(item, i)">
               <div slot="placeholder">
                 <i class="el-icon-picture-outline" style="font-size:162.5px;color:#f1f1f1"></i>
               </div>
@@ -135,6 +136,12 @@ export default {
     // },
 
     async getPersonalizedList() {
+      let loading = this.$loading({
+        lock: true,//lock的修改符--默认是false
+        text: "加载中，请稍候...",//显示在加载图标下方的加载文案
+        background: "rgba(0,0,0,0.8)",//遮罩层颜色
+        spinner: "el-icon-loading",//自定义加载图标类名
+      });
       // then异步执行
       await GetPersonalizedSongList().then(response => {
         response.rows.forEach(item => {
@@ -148,6 +155,7 @@ export default {
               })
         })
         this.personalizedList = response.rows
+        loading.close();
         // this.total = response.total
         // console.log("this.personalizedList");
         // console.log(this.personalizedList);
@@ -181,6 +189,12 @@ export default {
 
     //前端获取热门歌曲
     async getTopList() {
+      let loading = this.$loading({
+        lock: true,//lock的修改符--默认是false
+        text: "加载中，请稍候...",//显示在加载图标下方的加载文案
+        background: "rgba(0,0,0,0.8)",//遮罩层颜色
+        spinner: "el-icon-loading",//自定义加载图标类名
+      });
       // then异步执行  await同步执行
       await axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
           .then(async (success) => {
@@ -282,6 +296,7 @@ export default {
               // console.log("this.topLis")
               // console.log(this.topList)
             }
+            loading.close();
           }, (error) => {
             // console.log(error);
           })
@@ -307,8 +322,8 @@ export default {
     },
 
     topSrcError(item, index) {
-      console.log("topSrcError")
-      console.log(item)
+      // console.log("topSrcError")
+      // console.log(item)
       // if (/^err/.test(this.personalizedList[index]["albumPic"])) {
       // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
       this.$set(this.topList[index], "albumPic", this.topList[index]["albumPic"])
@@ -404,6 +419,9 @@ export default {
 </script>
 <!--<style lang="less" scoped>-->
 <style lang="scss" scoped>
+.el-image {
+  cursor: default !important;
+}
 .el-card {
   border: none;
 }

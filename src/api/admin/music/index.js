@@ -61,6 +61,7 @@ export function GetTopSongList (){
   // return request({
   return fetch({
     url: '/api/auth/music/top',
+    // url: '/api/sample/music/top',
     // url: '/api/auth/jwt/music/top',
     method: 'get',
     // params: query
@@ -72,9 +73,21 @@ export function GetTopSongListAndDuration (){
   // return request({
   return fetch({
     url: '/api/auth/music/topDuration',
+    // url: '/api/sample/music/topDuration',
     // url: '/api/auth/jwt/music/top',
     method: 'get',
     // params: query
+  })
+}
+
+//获取相似歌曲列表+歌曲时长
+export function GetSimilarListBootJs (query){
+  return fetch({
+    url: '/api/auth/music/similarList',
+    // url: '/api/sample/music/similarList',
+    // url: '/api/auth/jwt/music/top',
+    method: 'get',
+    params: query
   })
 }
 
