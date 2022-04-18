@@ -178,10 +178,14 @@ export default {
           })
     },
 
+    topSrcError(item, index) {
+      this.songVo.albumPic = require('@/assets/logo/MusicRec.png')
+    },
     similarImgSrcError(item, index) {
       //没有图片，加载系统图片
       this.$set(this.similarList[index], "albumPic", require('@/assets/logo/MusicRec.png'))
     },
+
     goDetailPage(row) {
       debugger
       this.$router.push({

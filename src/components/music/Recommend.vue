@@ -154,7 +154,7 @@ export default {
                 console.log(error);
               })
         })
-        this.personalizedList = response.rows
+        // this.personalizedList = response.rows
         loading.close();
         // this.total = response.total
         // console.log("this.personalizedList");
@@ -304,9 +304,13 @@ export default {
 
     // @error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
     personnalizedSrcError(item, index) {
+      //没有图片，加载系统图片
+      this.$set(this.personalizedList[index], "albumPic", require('@/assets/logo/MusicRec.png'))
+
+
       // if (/^err/.test(this.personalizedList[index]["albumPic"])) {
       // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
-      this.$set(this.personalizedList[index], "albumPic", this.personalizedList[index]["albumPic"])
+      // this.$set(this.personalizedList[index], "albumPic", this.personalizedList[index]["albumPic"])
       // } else {
       //   // if (!this.errobj[item]) {
       //   //   this.errobj[item] = 1
@@ -322,23 +326,11 @@ export default {
     },
 
     topSrcError(item, index) {
-      // console.log("topSrcError")
-      // console.log(item)
-      // if (/^err/.test(this.personalizedList[index]["albumPic"])) {
+      //没有图片，加载系统图片
+      this.$set(this.topList[index], "albumPic", require('@/assets/logo/MusicRec.png'))
+
       // this.$set(target, key, value)：target为需要添加属性的对象，key是要添加的属性名，value为属性key对应的值。
-      this.$set(this.topList[index], "albumPic", this.topList[index]["albumPic"])
-      // } else {
-      //   // if (!this.errobj[item]) {
-      //   //   this.errobj[item] = 1
-      //   // } else {
-      //   //   if (this.errobj[item] > 2) {
-      //   //     return
-      //   //   } else {
-      //   //     this.errobj[item] += 1
-      //   //   }
-      //   // }
-      //   // this.$set(this.personalizedList, index, 'err' + item)
-      // }
+      // this.$set(this.topList[index], "albumPic", this.topList[index]["albumPic"])
     },
 
 /*    getRecommendData() {
@@ -392,6 +384,7 @@ export default {
             // console.log("GetTopSongList***********")
             // console.log(response)
             this.topList = response.rows.slice(0,5)
+            this.personalizedList = response.rows.slice(6,11)
             // this.list = response.rows
             // this.total = response.total
             // this.listLoading = false
