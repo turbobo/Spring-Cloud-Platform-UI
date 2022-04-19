@@ -15,7 +15,7 @@
       <div>
         <template>
           <el-table
-              :data="topList.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+              :data="personalizedList.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
               stripe
               style="width: 100%">
             <el-table-column
@@ -66,7 +66,7 @@
               :current-page="currentPage"
               :page-size="pageSize"
               layout="total,prev,pager,next"
-              :total="topList.length">
+              :total="personalizedList.length">
           </el-pagination>
         </div>
 
@@ -77,13 +77,13 @@
 
 <script>
 import axios from 'axios'
-import {GetTopSongListAndDuration} from "@/api/admin/music";
+import {GetPersonalizedSongList, GetTopSongList, GetTopSongListAndDuration, getUserInfo} from "@/api/admin/music";
 
 export default {
   //前端获取热门歌曲
   name: 'page2',
   created() {
-    this.getTopList()
+    this.getPersonalizedListBootAll()
     // this. getTopListVue()
   },
   data() {
@@ -91,12 +91,15 @@ export default {
       // topList: [],
       currentPage: 1,  // 当前页码
       pageSize: 10,  // 每页显示的行数
-      topList: [],  // 表格数据
+      personalizedList: [],  // 表格数据
+      userInfo: {
+
+      },
     }
   },
   methods: {
     //前端获取歌曲时长
-    async getTopListVue() {
+    async getPersonalizedListVue() {
       // async异步执行  await或者不加修饰为同步执行
       await axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
           .then(async (success) => {
@@ -154,16 +157,33 @@ export default {
           })
     },
     //后端获取歌曲时长
-    async getTopList() {
-      GetTopSongListAndDuration()
-          .then(response => {
-            // console.log("GetTopSongList***********")
-            // console.log(response)
-            this.topList = response.rows
-            // this.list = response.rows
-            // this.total = response.total
-            // this.listLoading = false
+    async getPersonalizedListBootAll() {
+      // 开始加载
+      // let loading = this.$loading({
+      //   lock: true,//lock的修改符--默认是false
+      //   text: "加载中，请稍候...",//显示在加载图标下方的加载文案
+      //   background: "rgba(0,0,0,0.8)",//遮罩层颜色
+      //   spinner: "el-icon-loading",//自定义加载图标类名
+      // });
+      await getUserInfo()
+          .then(async success => {
+            // debugger
+            // console.log(success)
+            // console.log(success.userName)
+            this.userInfo.userName = success.userName
+            await GetPersonalizedSongList(this.userInfo)
+                .then(async response => {
+                  // debugger
+                  // console.log("GetTopSongList***********")
+                  // console.log(response)
+                  this.personalizedList = response.rows
+                  // this.list = response.rows
+                  // this.total = response.total
+                  // this.listLoading = false
+                })
           })
+      // console.log(user)
+
     },
 
     /**

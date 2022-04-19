@@ -1,4 +1,5 @@
 import fetch from '@/plugin/axios'
+import request from "@/plugin/axios";
 
 export function page (query) {
   return fetch({
@@ -45,11 +46,29 @@ export function putObj (id, obj) {
   })
 }
 
+
+export function getUserInfo () {
+  return request({
+    url: '/api/admin/user/v2/front/info',
+    method: 'get'
+  })
+}
+
 //获取个性化推荐歌曲列表
-export function GetPersonalizedSongList (){
+export function GetPersonalizedSongList (query){
   // return request({
   return fetch({
     url: '/api/auth/music/personalized',
+    // url: '/api/auth/jwt/music/top',
+    method: 'get',
+    params: query
+  })
+}
+
+export function GetPersonalizedListAll (){
+  return fetch({
+    url: '/api/auth/music/personalizedAll',
+    // url: '/api/sample/music/topDuration',
     // url: '/api/auth/jwt/music/top',
     method: 'get',
     // params: query

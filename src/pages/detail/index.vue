@@ -89,7 +89,6 @@ export default {
       // then异步执行
       await axios.get('http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist='+ this.songVo.artistName + '&track=' + this.songVo.title + '&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
           .then(async (success) => {
-            debugger
             if (success.data.similartracks.track.length == 0) {
               //未找到相似歌曲，则查找该艺术家的热门歌曲
               await axios.get('http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist='+ this.songVo.artistName + '&api_key=7537459f592d916b49e697b8a0fb53df&format=json')

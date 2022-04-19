@@ -86,10 +86,13 @@
 </template>
 
 <script>
-import {GetPersonalizedSongList, GetTopSongList, GetTopSongListAndDuration} from "@/api/admin/music";
-import axios from 'axios'
+import {GetPersonalizedSongList, GetTopSongList, GetTopSongListAndDuration, getUserInfo} from "@/api/admin/music";
+import { mapState } from 'vuex'
 
 export default {
+  // computed: {
+  //   ...mapState('d2admin/user', ['info'])
+  // },
   data() {
     return {
       listIndex: 0,
@@ -116,13 +119,16 @@ export default {
         page: 1,
         limit: 20,
       },
+      userInfo: {
+
+      },
       listLoading: true,
     }
   },
   created() {
     // this.getRecommendData()
     // this.getMusicList()
-    this.getPersonalizedList()
+    this.getPersonalizedListBoot()
     // this.getTopList()
     this.getTopMusicList()
   },
@@ -135,7 +141,7 @@ export default {
     //   this.getpersonalizedList()
     // },
 
-    async getPersonalizedList() {
+/*    async getPersonalizedList() {
       let loading = this.$loading({
         lock: true,//lock的修改符--默认是false
         text: "加载中，请稍候...",//显示在加载图标下方的加载文案
@@ -164,7 +170,7 @@ export default {
         //   if (this.personalizedList.length != 0) {
         //   }
         // }
-           /* this.personalizedList.forEach(item => {
+           /!* this.personalizedList.forEach(item => {
               let query_release = item.release
               let query_artistName = item.artistName
               //查询图片
@@ -183,12 +189,49 @@ export default {
                   }, (error) => {
                     console.log(error);
                   })
-            })*/
+            })*!/
       });
+    },*/
+
+    async getPersonalizedListBoot() {
+      await getUserInfo()
+          .then(async success => {
+            // debugger
+            // console.log(success)
+            // console.log(success.userName)
+            this.userInfo.userName = success.userName
+            await GetPersonalizedSongList(this.userInfo)
+                .then(async response => {
+                  // debugger
+                  // console.log("GetTopSongList***********")
+                  // console.log(response)
+                  this.personalizedList = response.rows
+                  // this.list = response.rows
+                  // this.total = response.total
+                  // this.listLoading = false
+                })
+          })
+      // console.log(user)
+
+    },
+
+    // 后台获取热门歌曲
+    async getTopMusicList() {
+      // this.listLoading = true
+      GetTopSongList()
+          .then(response => {
+            // console.log("GetTopSongList***********")
+            // console.log(response)
+            this.topList = response.rows.slice(0,5)
+            // this.personalizedList = response.rows.slice(20,25)
+            // this.list = response.rows
+            // this.total = response.total
+            // this.listLoading = false
+          })
     },
 
     //前端获取热门歌曲
-    async getTopList() {
+    /*async getTopList() {
       let loading = this.$loading({
         lock: true,//lock的修改符--默认是false
         text: "加载中，请稍候...",//显示在加载图标下方的加载文案
@@ -231,13 +274,13 @@ export default {
                     //加载QQ图片
                     if (loadQQImage){
                       //没有专辑图片，请求QQ 接口：根据歌曲名搜索专辑
-                      /*await axios({
+                      /!*await axios({
                         url: "https://c.y.qq.com/soso/fcgi-bin/client_search_cp??client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8",
                         baseURL: '',
                         method:'GET'
-                      }).*/
+                      }).*!/
                       // 1
-                      /*await axios.get("https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8")
+                      /!*await axios.get("https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8")
                       .then((success) => {
                             console.log(success)
                             //匹配歌手
@@ -256,7 +299,7 @@ export default {
                             //匹配不到歌手，就用第一张图片
                           }, (error) => {
                             console.log(error);
-                          })*/
+                          })*!/
                       // 2
                       await axios.get("/qq/client_search_cp?p=1&n=10&w="+tempObj.title+"&format=json&t=8", { // 这里会匹配到前面我们设置的/proxy，代替为https://www.tianqiapi.com
                         // params: {
@@ -300,7 +343,7 @@ export default {
           }, (error) => {
             // console.log(error);
           })
-    },
+    },*/
 
     // @error.once：图片项目error方法绑定once，为避免同一个失败链接无限触发error
     personnalizedSrcError(item, index) {
@@ -376,20 +419,6 @@ export default {
       return res
     },
 
-    // 后台获取热门歌曲
-    async getTopMusicList() {
-      // this.listLoading = true
-      GetTopSongList()
-          .then(response => {
-            // console.log("GetTopSongList***********")
-            // console.log(response)
-            this.topList = response.rows.slice(0,5)
-            this.personalizedList = response.rows.slice(6,11)
-            // this.list = response.rows
-            // this.total = response.total
-            // this.listLoading = false
-          })
-    },
     handleCurrentChange(pagenum) {
       // this.queryData.offset = (pagenum - 1) * this.queryData.limit
       // this.getpersonalizedList()
