@@ -194,6 +194,13 @@ export default {
     },*/
 
     async getPersonalizedListBoot() {
+      //开启 element-ui-loading
+      const loading = this.$loading({
+        lock: true,
+        text: '加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       await getUserInfo()
           .then(async success => {
             // debugger
@@ -205,10 +212,15 @@ export default {
                   // debugger
                   // console.log("GetTopSongList***********")
                   // console.log(response)
-                  this.personalizedList = response.rows
-                  // this.list = response.rows
-                  // this.total = response.total
-                  // this.listLoading = false
+                  this.personalizedList = response.rows.slice(0,5)
+
+                  //请求成功 关闭 element-ui-loading
+                  loading.close();
+                }, (error) => {
+                  //请求失败，6s后关闭
+                  setTimeout(() => {
+                      loading.close();
+                  }, 6000);
                 })
           })
       // console.log(user)
@@ -217,16 +229,25 @@ export default {
 
     // 后台获取热门歌曲
     async getTopMusicList() {
-      // this.listLoading = true
+      //开启 element-ui-loading
+      const loading = this.$loading({
+        lock: true,
+        text: '加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       GetTopSongList()
           .then(response => {
             // console.log("GetTopSongList***********")
             // console.log(response)
             this.topList = response.rows.slice(0,5)
-            // this.personalizedList = response.rows.slice(20,25)
-            // this.list = response.rows
-            // this.total = response.total
-            // this.listLoading = false
+            //请求成功 关闭 element-ui-loading
+            loading.close();
+          }, (error) => {
+            //请求失败，6s后关闭
+            setTimeout(() => {
+              loading.close();
+            }, 6000);
           })
     },
 
