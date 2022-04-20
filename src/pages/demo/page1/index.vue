@@ -77,7 +77,13 @@
 
 <script>
 import axios from 'axios'
-import {GetPersonalizedSongList, GetTopSongList, GetTopSongListAndDuration, getUserInfo} from "@/api/admin/music";
+import {
+  GetPersonalizedListAll,
+  GetPersonalizedSongList,
+  GetTopSongList,
+  GetTopSongListAndDuration,
+  getUserInfo
+} from "@/api/admin/music";
 
 export default {
   //前端获取热门歌曲
@@ -99,7 +105,7 @@ export default {
   },
   methods: {
     //前端获取歌曲时长
-    async getPersonalizedListVue() {
+    /*async getPersonalizedListVue() {
       // async异步执行  await或者不加修饰为同步执行
       await axios.get('http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=7537459f592d916b49e697b8a0fb53df&format=json')
           .then(async (success) => {
@@ -155,31 +161,30 @@ export default {
           }, (error) => {
             console.log(error);
           })
-    },
+    },*/
     //后端获取歌曲时长
     async getPersonalizedListBootAll() {
       // 开始加载
-      // let loading = this.$loading({
-      //   lock: true,//lock的修改符--默认是false
-      //   text: "加载中，请稍候...",//显示在加载图标下方的加载文案
-      //   background: "rgba(0,0,0,0.8)",//遮罩层颜色
-      //   spinner: "el-icon-loading",//自定义加载图标类名
-      // });
+
       await getUserInfo()
           .then(async success => {
-            // debugger
-            // console.log(success)
-            // console.log(success.userName)
+            const loading = this.$loading({
+              lock: true,//lock的修改符--默认是false
+              text: "加载中，请稍候...",//显示在加载图标下方的加载文案
+              background: "rgba(0,0,0,0.8)",//遮罩层颜色
+              spinner: "el-icon-loading",//自定义加载图标类名
+            });
             this.userInfo.userName = success.userName
-            await GetPersonalizedSongList(this.userInfo)
+            await GetPersonalizedListAll(this.userInfo)
                 .then(async response => {
-                  // debugger
-                  // console.log("GetTopSongList***********")
-                  // console.log(response)
                   this.personalizedList = response.rows
-                  // this.list = response.rows
-                  // this.total = response.total
-                  // this.listLoading = false
+                  //请求成功 关闭 element-ui-loading
+                  loading.close();
+                }, (error) => {
+                  //请求失败，6s后关闭
+                  setTimeout(() => {
+                    loading.close();
+                  }, 6000);
                 })
           })
       // console.log(user)

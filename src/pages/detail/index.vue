@@ -162,7 +162,7 @@ export default {
     // 后台获取热门歌曲
     async getSimilarListBoot() {
       // 开始加载
-      let loading = this.$loading({
+      const loading = this.$loading({
         lock: true,//lock的修改符--默认是false
         text: "加载中，请稍候...",//显示在加载图标下方的加载文案
         background: "rgba(0,0,0,0.8)",//遮罩层颜色
@@ -174,6 +174,11 @@ export default {
             // console.log(response)
             this.similarList = response.rows.slice(0,5)
             loading.close();
+          }, (error) => {
+            //请求失败，6s后关闭
+            setTimeout(() => {
+              loading.close();
+            }, 6000);
           })
     },
 

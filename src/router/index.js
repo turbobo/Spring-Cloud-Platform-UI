@@ -81,7 +81,8 @@ let fetchPermissionInfo = async () => {
   // }
   try {
     let userPermissionInfo = await userService.getUserPermissionInfo()
-    userInfo.name = userPermissionInfo.userName
+    // userInfo.name = userPermissionInfo.userName
+    userInfo.name = userPermissionInfo.name  //显示系统名,userName为登录名
     userInfo.avatarUrl = userPermissionInfo.avatarUrl
     permissionMenu = userPermissionInfo.accessMenus
     permissionHeader = userPermissionInfo.accessHeader

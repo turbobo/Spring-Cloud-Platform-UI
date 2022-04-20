@@ -88,8 +88,8 @@ export default {
       ],
       // 表单
       formLogin: {
-        username: "admin",
-        password: "admin",
+        username: "",
+        password: "",
         uuid: "",
         code: ""
       },

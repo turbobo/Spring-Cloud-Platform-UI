@@ -92,6 +92,7 @@ export default {
       currentPage: 1,  // 当前页码
       pageSize: 10,  // 每页显示的行数
       topList: [],  // 表格数据
+      loading2: 0
     }
   },
   methods: {
@@ -156,19 +157,22 @@ export default {
     //后端获取歌曲时长
     async getTopListAndDuration() {
       // 开始加载
-      let loading = this.$loading({
+      const loading = this.$loading({
         lock: true,//lock的修改符--默认是false
         text: "加载中，请稍候...",//显示在加载图标下方的加载文案
         background: "rgba(0,0,0,0.8)",//遮罩层颜色
         spinner: "el-icon-loading",//自定义加载图标类名
       });
-      GetTopSongListAndDuration()
-          .then(response => {
-            // console.log("GetTopSongList***********")
-            // console.log(response)
+      await GetTopSongListAndDuration()
+          .then(async response => {
             this.topList = response.rows
             // 获取数据显示成功后，关闭loading
             loading.close();
+          }, (error) => {
+            //请求失败，6s后关闭
+            setTimeout(() => {
+              loading.close();
+            }, 6000);
           })
     },
 

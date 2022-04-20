@@ -65,13 +65,13 @@ export function GetPersonalizedSongList (query){
   })
 }
 
-export function GetPersonalizedListAll (){
+export function GetPersonalizedListAll (query){
   return fetch({
     url: '/api/auth/music/personalizedAll',
     // url: '/api/sample/music/topDuration',
     // url: '/api/auth/jwt/music/top',
     method: 'get',
-    // params: query
+    params: query
   })
 }
 

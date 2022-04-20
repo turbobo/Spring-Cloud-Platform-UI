@@ -122,7 +122,6 @@ export default {
       userInfo: {
 
       },
-      listLoading: true,
     }
   },
   created() {
@@ -194,21 +193,19 @@ export default {
     },*/
 
     async getPersonalizedListBoot() {
-      //开启 element-ui-loading
-      const loading = this.$loading({
-        lock: true,
-        text: '加载中',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      });
       await getUserInfo()
           .then(async success => {
-            // debugger
-            // console.log(success)
-            // console.log(success.userName)
+            const loading = this.$loading({
+              lock: true,
+              text: '加载中，请稍候',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)'
+            });
             this.userInfo.userName = success.userName
             await GetPersonalizedSongList(this.userInfo)
                 .then(async response => {
+                  //开启 element-ui-loading
+
                   // debugger
                   // console.log("GetTopSongList***********")
                   // console.log(response)
@@ -219,7 +216,7 @@ export default {
                 }, (error) => {
                   //请求失败，6s后关闭
                   setTimeout(() => {
-                      loading.close();
+                    loading.close();
                   }, 6000);
                 })
           })
@@ -229,24 +226,22 @@ export default {
 
     // 后台获取热门歌曲
     async getTopMusicList() {
-      //开启 element-ui-loading
-      const loading = this.$loading({
+      //开启 element-ui-loading   -- 在最终返回数据的方法前面初始化
+      const loading1 = this.$loading({
         lock: true,
-        text: '加载中',
+        text: '加载中，请稍候',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      GetTopSongList()
-          .then(response => {
-            // console.log("GetTopSongList***********")
-            // console.log(response)
+      await GetTopSongList()
+          .then(async response => {
             this.topList = response.rows.slice(0,5)
             //请求成功 关闭 element-ui-loading
-            loading.close();
+            loading1.close();
           }, (error) => {
             //请求失败，6s后关闭
             setTimeout(() => {
-              loading.close();
+              loading1.close();
             }, 6000);
           })
     },
