@@ -6,5 +6,10 @@ export default [
     title: '推荐页面',
     icon: 'music'
   },
+  {
+    path: '/userCenter',
+    title: '用户中心',
+    icon: 'address-book'
+  },
   // { path: '/detail', title: '音乐详情', icon: 'list' },
 ]

@@ -2,7 +2,6 @@ import fetch from '@/plugin/axios'
 
 export function page (query) {
   return fetch({
-    // url: '/api/admin/user/page',
     url: '/api/admin/user/v2/single',
     method: 'get',
     params: query
@@ -19,7 +18,7 @@ export function addObj (obj) {
 
 export function getObj (id) {
   return fetch({
-    url: '/api/admin/user/' + id,
+    url: '/api/admin/user/v2/single/' + id,
     method: 'get'
   })
 }
@@ -37,7 +36,7 @@ export function delObj (id) {
 
 export function putObj (id, obj) {
   return fetch({
-    url: '/api/admin/user/' + id,
+    url: '/api/admin/user/v2/single/' + id,
     method: 'put',
     data: obj
   })
@@ -45,7 +44,7 @@ export function putObj (id, obj) {
 
 export function updatePass (id, obj) {
   return fetch({
-    url: '/api/admin/user/updatePass' + id,
+    url: '/api/admin/user/v2/single/updatePass' + id,
     method: 'put',
     data: obj
   })

@@ -55,7 +55,7 @@
         <el-form-item label="歌曲年份" prop="year">
           <el-input v-model="form.year" placeholder="请输入歌曲年份"></el-input>
         </el-form-item>
-        <el-form-item label="歌曲时长" prop="duration">
+        <el-form-item label="歌曲时长" prop="duration" :formatter="durationFormatter">
           <el-input v-model="form.duration" placeholder="请输入歌曲时长"></el-input>
         </el-form-item>
 <!--        <el-form-item label="艺术家名" prop="artistName">
@@ -145,7 +145,7 @@ export default {
           //   trigger: 'blur'
           // }
         ],
-        year: [
+/*        year: [
           {
             required: true,
             message: '请输入歌曲年份',
@@ -157,7 +157,7 @@ export default {
             message: '长度为4个字符',
             trigger: 'blur'
           }
-        ],
+        ],*/
         duration: [
           {
             required: true,
@@ -315,7 +315,28 @@ export default {
         year: undefined,
         duration: undefined
       }
-    }
+    },
+
+    durationFormatter(duration) {
+      if (duration != null && duration != "") {
+        //计算分钟
+        //算法：将秒数除以60，然后下舍入，既得到分钟数
+        var sec = duration;
+        var h;
+        h = Math.floor(sec / 60);
+        //计算秒
+        //算法：取得秒%60的余数，既得到秒数
+        sec = sec % 60;
+        //将变量转换为字符串
+        h += '';
+        sec += '';
+        //如果只有一位数，前面增加一个0
+        h = (h.length == 1) ? '0' + h : h;
+        sec = (sec.length == 1) ? '0' + sec : sec;
+        return h + ':' + sec;
+      }
+      return "未知";
+    },
   }
 }
 </script>

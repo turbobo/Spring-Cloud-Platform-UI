@@ -1,4 +1,5 @@
 import demo from './modules/demo'
+import userCenter from './modules/userCenter'
 import layoutHeaderAside from '@/layout/header-aside'
 
 const meta = { requiresAuth: true }
@@ -46,6 +47,7 @@ const frameIn = [
     ]
   },
   demo,
+  userCenter,
   {
     path: '/detail',
     name: 'detail',

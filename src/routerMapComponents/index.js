@@ -14,6 +14,7 @@ let componentMaps = {
   'devFormManager': () => import(/* webpackChunkName: "devFormManager" */'@/pages/dev/build'),
   'codeManager': () => import(/* webpackChunkName: "codeManager" */'@/pages/dev/code'),
   'onlineManager': () => import(/* webpackChunkName: "onlineManager" */'@/pages/admin/online'),
+  'userCenterManager': () => import(/* webpackChunkName: "userCenterManager" */'@/pages/admin/userCenter'),
 
 }
 files.keys().forEach((key) => {
