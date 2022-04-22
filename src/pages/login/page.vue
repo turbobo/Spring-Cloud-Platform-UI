@@ -104,7 +104,7 @@ export default {
       ],
       // 表单
       formLogin: {
-        username: "1111",
+        username: "123456",
         password: "admin",
         uuid: "",
         code: ""

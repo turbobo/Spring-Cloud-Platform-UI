@@ -9,6 +9,15 @@ export function page (query) {
   })
 }
 
+export function getSingleByUserName (query) {
+  return fetch({
+    // url: '/api/admin/user/page',
+    url: '/api/admin/user/v2/single/username',
+    method: 'get',
+    params: query
+  })
+}
+
 export function addObj (obj) {
   return fetch({
     url: '/api/admin/user',

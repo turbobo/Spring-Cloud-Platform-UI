@@ -83,7 +83,7 @@ import {
   addObj,
   getObj,
   delObj,
-  putObj, updatePass
+  putObj, updatePass, getSingleByUserName
 } from '@/api/admin/userCenter/index'
 import { mapGetters } from 'vuex'
 import {getUserInfo} from "@/api/admin/music";
@@ -206,6 +206,9 @@ export default {
         status: 1,  //账号启用状态
         username: undefined       //单个用户
       },
+      singleQuery: {
+        username: undefined,
+      },
       sexOptions: ['男', '女'],
       dialogFormVisible: false,
       dialogStatus: '',
@@ -232,8 +235,8 @@ export default {
       await getUserInfo()
           .then(async success => {
             this.listLoading = true
-            this.listQuery.username = success.userName
-            await page(this.listQuery)
+            this.singleQuery.username = success.userName
+            await getSingleByUserName(this.singleQuery)
                 .then(async response => {
                   // console.log(response.total)
                   // debugger
@@ -357,13 +360,12 @@ export default {
           updatePass(this.form.id, this.form).then(() => {
             this.dialogFormVisible = false
             this.getList()
-            // const loading = this.$loading({
-            //   lock: true,//lock的修改符--默认是false
-            //   text: "修改成功，请重新登录",//显示在加载图标下方的加载文案
-            //   background: "rgba(0,0,0,0.8)",//遮罩层颜色
-            //   spinner: "el-icon-loading",//自定义加载图标类名
-            // });
-            // loading.close();
+            this.$notify({
+              title: '成功',
+              message: '修改成功，请重新登录！',
+              type: 'success',
+              duration: 3000
+            })
             this.$router.push('/login')
           })
         } else {

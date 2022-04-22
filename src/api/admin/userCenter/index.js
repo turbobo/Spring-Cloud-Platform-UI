@@ -23,6 +23,15 @@ export function getObj (id) {
   })
 }
 
+export function getSingleByUserName (query) {
+  return fetch({
+    // url: '/api/admin/user/page',
+    url: '/api/admin/user/v2/single/username',
+    method: 'get',
+    params: query
+  })
+}
+
 export function delObj (id) {
   return fetch({
     //物理删除接口
